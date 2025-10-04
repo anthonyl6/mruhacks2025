@@ -1,0 +1,16 @@
+services:
+  mongodb:
+    image: mongo:6-jammy
+    hostname: mongodb
+    networks:
+      - mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata6:/data/db
+volumes:
+  dbdata6:
+
+networks:
+  mongo:
+    driver: bridge
