@@ -29,6 +29,7 @@
           with pkgs;
           [
             eas-cli
+            yarn
             # packages here
             yarn
           ]
