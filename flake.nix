@@ -28,6 +28,7 @@
         buildInputs =
           with pkgs;
           [
+            eas-cli
             # packages here
             yarn
           ]
