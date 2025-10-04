@@ -36,15 +36,40 @@
         create_home: yes
         groups: sudo,docker
         shell: /bin/bash # Or your preferred shell
-        password: 12345
+        password: "12345"
       loop: "{{ users_to_provision }}"
 
     - name: Fetch and add SSH public keys from GitHub
       ansible.posix.authorized_key:
         user: "{{ item.name }}"
         state: present
-        key: "{{ lookup('url', item.github_key_url, validate_certs=false) }}" # Adjust validate_certs if needed
+        key: "{{ lookup('url', item.github_key_url, validate_certs=false, split_lines=true) }}"
+        exclusive: false
       loop: "{{ users_to_provision }}"
+
+    - name: Replace commas with newlines in authorized_keys
+      ansible.builtin.replace:
+        path: "/home/{{ item.name }}/.ssh/authorized_keys"
+        regexp: ','
+        replace: '\n'
+        mode: '0600'
+      loop: "{{ users_to_provision }}"
+      when: item.name is defined
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Copy directory from local to remote
+      ansible.builtin.copy:
+        src: ../../backend
+        dest: /var/api/backend
+
+    - name: Bring up Docker Compose services
+      community.docker.docker_compose_v2:
+        project_src: /var/api/backend/
+        state: present
 
     - name: Ensure PasswordAuthentication is set to no
       ansible.builtin.lineinfile:
