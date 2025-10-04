@@ -1,0 +1,11 @@
+# Terraform and ansible
+devops/terraform/terraform.tfvars
+devops/terraform/.terraform
+devops/terraform/.terraform.lock.hcl
+devops/terraform/terraform.tfstate
+devops/terraform/terraform.tfstate.backup
+devops/terraform/.terraform.tfstate.lock.info
+devops/terraform/linux_amd64/
+
+# Python
+.venv/

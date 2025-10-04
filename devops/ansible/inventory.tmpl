@@ -1,0 +1,4 @@
+[server]
+%{ for ip in web_server_ips ~} ansible_user=deployuser
+${ip}
+%{ endfor ~}
