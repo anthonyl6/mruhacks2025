@@ -29,6 +29,7 @@
           with pkgs;
           [
             # packages here
+            yarn
           ]
           ++ lib.optionals stdenv.isLinux (
             with pkgs;
