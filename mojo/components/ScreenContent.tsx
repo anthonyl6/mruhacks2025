@@ -9,8 +9,8 @@ export const ScreenContent = () => {
   const isAndroid15 = Platform.OS === 'android' && Platform.Version >= 35;
   const [selectedTab, setSelectedTab] = useState<'send' | 'request'>('send');
   const tabs = [
-    { label: 'Send', value: 'send' as const },
-    { label: 'Request', value: 'request' as const },
+    { label: 'Send', value: 'send' as const, selectedColor: '#db8a74' },
+    { label: 'Request', value: 'request' as const, selectedColor: '#9b96b0' },
   ];
   const WrapperComponent = isAndroid15 ? View : SafeAreaView;
   return (
@@ -28,7 +28,7 @@ export const ScreenContent = () => {
             <Pressable
               className="items-center justify-center overflow-hidden rounded-full bg-[#212121] p-5 transition-all duration-300 active:bg-[#3f3f3f]"
               onPress={() => {
-                console.log('search');
+                console.log('copy link to clipboard');
               }}>
               <LinkIcon stroke={'#ffffff'} />
             </Pressable>
