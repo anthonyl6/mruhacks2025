@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import Header from '../components/Header';
 import NoPage from '../pages/NoPage';
+import Receive from '../pages/Receive';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <BrowserRouter>
         <Header/>
         <Routes>
+          <Route path='/receive' element={<Receive/>}/>
           <Route path='*' element={<NoPage/>}/>
         </Routes>
       </BrowserRouter>
@@ -15,4 +17,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

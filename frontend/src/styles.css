@@ -2,13 +2,25 @@
 @import 'tailwindcss';
 
 :root {
-  @apply text-white;
+  @apply text-white font-mojo;
 }
 
 @theme {
   --color-global: #121212;
-  --color-body: #1f1f1f;
+  --color-element: #1f1f1f;
 
 
   --font-mojo: "Nova Mono";
+}
+
+@layer components {
+  .box {
+    @apply 
+      border-2 
+      rounded-xl 
+      bg-element 
+      border-element 
+      shadow-lg 
+      shadow-black
+  }
 }
