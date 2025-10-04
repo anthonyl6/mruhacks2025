@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import Header from '../components/Header';
 import NoPage from '../pages/NoPage';
 import Receive from '../pages/Receive';
+import Pay from '../pages/Pay';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Header/>
         <Routes>
           <Route path='/receive' element={<Receive/>}/>
+          <Route path='/pay' element={<Pay/>}/>
           <Route path='*' element={<NoPage/>}/>
         </Routes>
       </BrowserRouter>

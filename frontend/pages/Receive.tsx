@@ -17,7 +17,7 @@ function Recieve() {
       <div className="box mt-16 p-4">
         <h2 className=''>You received some money!</h2>
         <p className=''>
-          ${amount.toString()} from {source}
+          ${amount.toFixed(2)} from {source}
         </p>
       </div>
       <div className="mt-4 flex flex-row">
