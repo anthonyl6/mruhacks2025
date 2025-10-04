@@ -16,3 +16,8 @@ devops/terraform/linux_amd64/
 **/__pycache__
 
 # Backend
+<<<<<<< HEAD
+=======
+backend/.env
+backend/.env
+>>>>>>> fcb984a (gitnignore problems)
