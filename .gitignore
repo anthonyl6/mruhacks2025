@@ -9,3 +9,7 @@ devops/terraform/linux_amd64/
 
 # Python
 .venv/
+
+# Environment variables
+.env
+.direnv/
