@@ -62,15 +62,30 @@
         };
 
         apps = {
-          dev =
+          install-mobile =
             let
-              dev = pkgs.writeShellScript "dev" ''
-                echo "running dev environment"
+              install-mobile = pkgs.writeShellScript "install-mobile" ''
+                echo "installing mobile dependencies"
+                cd mojo
+                ${pkgs.bun}/bin/bun i
               '';
             in
             {
               type = "app";
-              program = "${dev}";
+              program = "${install-mobile}";
+            };
+          dev-mobile =
+            let
+              dev-mobile = pkgs.writeShellScript "dev-mobile" ''
+                echo "running dev environment"
+                cd mojo
+                nix run .#install-mobile
+                ${pkgs.bun}/bin/bun start
+              '';
+            in
+            {
+              type = "app";
+              program = "${dev-mobile}";
             };
         };
       }
