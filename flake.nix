@@ -29,9 +29,10 @@
           with pkgs;
           [
             eas-cli
+            # website
             yarn
-            # packages here
-            yarn
+            # mobile app
+            bun
           ]
           ++ lib.optionals stdenv.isLinux (
             with pkgs;
