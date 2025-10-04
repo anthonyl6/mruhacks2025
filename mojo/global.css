@@ -1,2 +1,17 @@
 @import 'tailwindcss';
 @import 'nativewind/theme';
+
+@theme {
+  --color-sending: #db8a74;
+  --color-sending-secondary: #fac9b8;
+  --color-receiving: #444054;
+  --color-receiving-secondary: #2f243a;
+  --color-background: #121212;
+  --color-foreground: #ffffff;
+  --color-border: #3f3f3f;
+}
+
+* {
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+}

@@ -1,26 +1,21 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
-import { EditScreenInfo } from './EditScreenInfo';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type ScreenContentProps = {
   title: string;
-  path: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
-export const ScreenContent = ({ title, path, children }: ScreenContentProps) => {
+export const ScreenContent = ({ children }: ScreenContentProps) => {
   return (
-    <View className={styles.container}>
-      <Text className={styles.title}>{title}</Text>
-      <View className={styles.separator} />
-      <EditScreenInfo path={path} />
-      {children}
+    <View className="bg-background flex flex-1 items-center justify-center">
+      <SafeAreaView>
+        <Text className="text-foreground flex-1 text-5xl">Mojo</Text>
+        <View className="bg-foreground my-7 h-[1px] w-4/5" />
+        {children}
+      </SafeAreaView>
     </View>
   );
-};
-const styles = {
-  container: `items-center flex-1 justify-center bg-white`,
-  separator: `h-[1px] my-7 w-4/5 bg-gray-200`,
-  title: `text-xl font-bold`,
 };
