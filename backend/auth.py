@@ -1,10 +1,12 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from jinja2 import TemplateNotFound
-from db import get_user, insert_user, create_session
+from db import get_user, insert_user, create_session, init_new_user
 
 auth_bp = Blueprint('auth', __name__, template_folder='templates')
+
+
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -27,6 +29,10 @@ def register():
             status = insert_user(username=username, hash=generate_password_hash(password, 10))
             if not status:
                 return jsonify({"message": "Error registering!"}), 500
+            
+            # Init user
+            if not init_new_user(username):
+                return jsonify({"message": "Error initializing new user!"}), 500
             
             return jsonify({"message": "Registered successfully!"}), 200
     else:
@@ -61,7 +67,6 @@ def login():
 @auth_bp.route("/logout", methods=["POST", "GET"])
 @jwt_required()
 def logout():
-    session.clear()
     return jsonify({"message": "Logged out!"}), 403   
     
 @auth_bp.route('/check', methods=['GET', "POST"])

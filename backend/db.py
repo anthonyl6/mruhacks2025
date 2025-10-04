@@ -1,22 +1,34 @@
+from os import getenv
 from pymongo import MongoClient
 
-CONNECTION_STRING = "mongodb://localhost:27017/"
 
 # def get_block_list():
 #    client = MongoClient(CONNECTION_STRING)
 #    return client["blocklist"]
 
 
+# Main database
 def get_database():
-   client = MongoClient(CONNECTION_STRING)
+   client = MongoClient(getenv("MONGODB_URL"))
    return client["users"]
-  
-# This is added so that many files can reuse the function get_database()
 
+# Collections
 def get_auth_collection():
-    dbname = get_database()
-    collection_name = dbname["auth"]
-    return collection_name
+   dbname = get_database()
+   collection_name = dbname["auth"]
+   return collection_name
+
+def get_details_collection():
+   dbname = get_database()
+   collection_name = dbname["details"]
+   return collection_name
+
+# Actions
+def init_new_user(user):
+   return get_details_collection().insert_one({
+      "username": user,
+      "balance": 0
+   })
 
 def create_session(user, access_token):
    # TODO: Revoke previous session
@@ -32,3 +44,6 @@ def get_user(username):
 
 def insert_user(username, hash):
    return get_auth_collection().insert_one({"username": username, "password": hash, "session": None})
+
+def get_user_details(user):
+   return get_details_collection().find_one({"username": user})

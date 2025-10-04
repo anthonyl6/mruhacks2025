@@ -1,13 +1,24 @@
 services:
   mongodb:
     image: mongo:6-jammy
-    hostname: mongodb
+    hostname: mongodbbox
     networks:
       - mongo
     ports:
       - '27017:27017'
     volumes:
       - dbdata6:/data/db
+
+  mojo:
+    build: .
+    networks:
+      - mongo
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=erqwrq23213DWDQEQW231@#1fdasdaws
+      - MONGODB_URL=mongodb://mongodbbox:27017/
+
 volumes:
   dbdata6:
 

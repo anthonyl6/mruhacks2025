@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager
 from jinja2 import TemplateNotFound
 from dotenv import load_dotenv
 from auth import auth_bp
+from account_details import account_bp
 from os import getenv
 from datetime import timedelta
 
@@ -14,6 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(account_bp, url_prefix="/account")
 
 
 app.config["JWT_SECRET_KEY"] = getenv("SECRET_KEY")
