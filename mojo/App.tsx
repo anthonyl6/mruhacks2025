@@ -6,11 +6,9 @@ import './global.css';
 
 export default function App() {
   return (
-    <>
     <SafeAreaProvider>
-      <ScreenContent title="Home"></ScreenContent>
+      <ScreenContent />
       <StatusBar style="inverted" />
     </SafeAreaProvider>
-    </>
   );
 }
