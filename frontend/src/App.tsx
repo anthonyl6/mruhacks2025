@@ -5,7 +5,7 @@ import Receive from '../pages/Receive';
 
 function App() {
   return (
-    <div className='min-h-screen bg-global'>
+    <div className='min-h-screen bg-global p-4'>
       <BrowserRouter>
         <Header/>
         <Routes>
