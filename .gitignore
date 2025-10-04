@@ -13,3 +13,6 @@ devops/terraform/linux_amd64/
 # Environment variables
 .env
 .direnv/
+**/__pycache__
+
+# Backend
