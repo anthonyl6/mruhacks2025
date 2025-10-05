@@ -7,7 +7,6 @@ from account_details import account_bp
 from payments import payments_bp
 from os import getenv
 from datetime import timedelta
-from schema import check_db_connection
 
 ACCESS_EXPIRES = timedelta(hours=1)
 
