@@ -5,21 +5,20 @@ FROM node:22.19.0-alpine
 WORKDIR /app
 
 # Copy package files
-COPY package.json yarn.lock* package-lock.json* ./
+COPY package.json yarn.lock* ./
 
 # Install dependencies
 RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
-    else npm install; fi
+    else yarn install; fi
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN yarn build
 
 # Expose port
 EXPOSE 3002
 
 # Start the application
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "3002"]
+CMD ["yarn", "preview", "--", "--host", "0.0.0.0", "--port", "3002"]
