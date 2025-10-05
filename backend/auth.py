@@ -52,7 +52,7 @@ def login():
             return jsonify({"message": "Unknown username and password!"}), 403
 
         if check_password_hash(user.password, password):
-            token = create_session(username, create_access_token(username, additional_claims={"fname": user.fname, "lname": user.lname, "email": user.email, "username": user.username}))
+            token = create_session(username, create_access_token(username, additional_claims={"fname": user.fname, "lname": user.lname, "email": user.email, "username": user.username, "balance": user.balance}))
             if not token:
                 return jsonify({"message": "Login failed!"}), 500
             
