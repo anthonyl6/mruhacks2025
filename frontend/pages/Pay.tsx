@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider'
 import axios from 'axios'
 
@@ -10,23 +11,27 @@ function Pay() {
   // This is ai slop, sorta
   const [id, setId] = useState<string | null>(null);
   const [targetUser, setTargetUser] = useState<string>('') // This might actually be user object
-  const [amount, setAmount] = useState<Number>(0)
+  const [amount, setAmount] = useState<Number>(1)
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     setId(queryParams.get('id'))
 
     // do stuff with order id
-    axios.get(`${apiURL}/some endpoint`, { id }).then((res) => {
-      setAmount(res.data.amount);
-      setTargetUser(res.data.targetUser)
+    axios.get(`${apiURL}/account/details`,{
+      params: { id }, 
+      headers: {Authorization: `Bearer ${authToken}`}
+    }
+    ).then((res) => {
+      setAmount(res.data.balance);
+      setTargetUser(res.data.username)
     });
   }, []);
 
   // Dunno if we need res, w/e
   async function handleSend() {
-    await axios.post(`${apiURL}/payments/send`, 
-      {amount: amount, targetUser: targetUser},
+    await axios.post(`${apiURL}/payments/confirm`, 
+      {transaction_id: id, confirm: true},
       {headers: {Authorization: `Bearer ${authToken}`}}
     );
     // now maybe redirect to Close.tsx or maybe another confirmation page?

@@ -17,7 +17,7 @@ interface AuthContextData {
   authToken: string | undefined;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string, fname: string, lname: string, email: string) => Promise<AuthContextData>;
   loading: boolean;
 }
 
@@ -48,13 +48,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     navigate("/pay");
   }
 
-  async function register(username: string, password: string) {
+  async function register(username: string, password: string, fname: string, lname: string, email: string) {
     setLoading(true);
     const { status } = await axios.post<{ message: string }>(
       `${apiURL}/auth/register`,
       {
         username,
         password,
+        fname,
+        lname,
+        email
       }
     );
 
@@ -71,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    console.log("authToken", authToken);
+    // console.log("authToken", authToken); 
     if (authToken) {
       setUser(JSON.parse(atob(authToken.split(".")[1])));
       setIsAuthenticated(true);

@@ -1,16 +1,26 @@
 import { useId } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function RegisterForm() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate()
 
   const { register } = useAuth();
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
-    const res = await register(username, password);
-    console.log(res);
+    await register(
+      username, password, fname, lname, email
+    ).catch((error) => {
+      console.log(error)
+      navigate('/register');
+    });
+    navigate('/login')
   }
 
   return (
@@ -39,6 +49,45 @@ function RegisterForm() {
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
+          }}
+        />
+      </div>
+      <div className="text-left my-4 box p-2">
+        <label htmlFor="fname">First Name</label>
+        <br />
+        <input
+          id={useId()}
+          className="w-full p-2 outline-0"
+          placeholder="Enter First Name"
+          value={fname}
+          onChange={(e) => {
+            setFname(e.target.value);
+          }}
+        />
+      </div>
+      <div className="text-left my-4 box p-2">
+        <label htmlFor="lname">Last Name:</label>
+        <br />
+        <input
+          id={useId()}
+          className="w-full p-2 outline-0"
+          placeholder="Enter Last Name"
+          value={lname}
+          onChange={(e) => {
+            setLname(e.target.value);
+          }}
+        />
+      </div>
+      <div className="text-left my-4 box p-2">
+        <label htmlFor="email">Email:</label>
+        <br />
+        <input
+          id={useId()}
+          className="w-full p-2 outline-0"
+          placeholder="example@mail.com"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
           }}
         />
       </div>
