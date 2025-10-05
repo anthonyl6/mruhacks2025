@@ -28,15 +28,15 @@ export function AuthProvider({ children }: {children: ReactNode}) {
     setLoading(true);
     try {
       // await do auth here, this gets authToken
-      console.log(apiURL)
       const res = await axios.post(`${apiURL}/auth/login`, 
         {username: username, password: password}
       );
-      console.log(res)
-      return(res)
+      setAuthToken(res.data.token);
       // unpack authToken into set user (same as useEffect code below)
-      // setUser(JSON.parse(atob(authToken ?? "")));
-      // window.localStorage.setItem("authToken", "dsadsadsada");
+      setUser(JSON.parse(atob(authToken.split('.')[1])));
+      window.localStorage.setItem("authToken", authToken);
+
+      return res;
     } catch (error) {
       console.log(`Error when logging in as ${username}: ${error}`)
     } finally {
@@ -48,7 +48,7 @@ export function AuthProvider({ children }: {children: ReactNode}) {
     try {
       const formData = JSON.stringify({username: username, password: password});
       const res = await axios.post(`${apiURL}/auth/register`,
-        formData, config
+        formData
       );
       console.log(res);
     } catch (error) {
@@ -61,9 +61,18 @@ export function AuthProvider({ children }: {children: ReactNode}) {
   //   setUser(null);
   // }
 
-  // useEffect(() => {
-  //   setUser(JSON.parse(atob(authToken ?? "")))
-  // }, [authToken]);
+  useEffect(() => {
+    if (authToken) {
+      console.log(JSON.parse(atob(authToken.split(".")[1])))
+    }
+  }, [authToken]);
+
+  useEffect(() => {
+    const auth = window.localStorage.getItem("authToken");
+    if (auth) {
+      setAuthToken(auth);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated: !!user, key, login, register}}>
