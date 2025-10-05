@@ -1,24 +1,28 @@
 # Use Node 22.19.0 Alpine for smaller image size
 FROM node:22.19.0-alpine
 
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:$PATH"
+
 # Set working directory
 WORKDIR /app
 
 # Copy package files
-COPY package.json yarn.lock* ./
+COPY package.json bun.lock* ./
 
 # Install dependencies
-RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-    else yarn install; fi
+RUN if [ -f bun.lock ]; then bun install --frozen-lockfile; \
+    else bun install; fi
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN yarn build
+RUN bun run build
 
 # Expose port
 EXPOSE 3002
 
 # Start the application
-CMD ["yarn", "preview", "--", "--host", "0.0.0.0", "--port", "3002"]
+CMD ["bun", "run", "preview", "--", "--host", "0.0.0.0", "--port", "3002"]
