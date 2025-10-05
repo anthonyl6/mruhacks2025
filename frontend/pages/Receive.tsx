@@ -1,10 +1,6 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../providers/AuthProvider'
-import Loading from '../components/Loading'
 
 function Recieve() {
-  const { isAuthenticated } = useAuth();
   const [source] = useState<string>('John');
   const [amount] = useState<number>(200);
 

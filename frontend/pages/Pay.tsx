@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider'
-import Loading from '../components/Loading'
-import Bank from '../components/Bank';
 
 
 function Pay() {
