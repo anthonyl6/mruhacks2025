@@ -3,7 +3,13 @@ import axios from 'axios';
 
 export const apiURL = 'https://api-mojo.alahdal.ca';
 
-export type User = any;
+export type User = {
+  fname: string;
+  lname: string;
+  email: string;
+  username: string;
+  balance: number;
+};
 
 export interface AuthContextData {
   authToken: string | undefined;
