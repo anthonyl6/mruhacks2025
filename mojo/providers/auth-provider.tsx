@@ -35,10 +35,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       username,
       password,
     });
-    localStorage.setItem('authToken', data.token);
     setAuthToken(data.token);
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (authToken) {
+      setUser(JSON.parse(atob(authToken.split('.')[1])));
+      setIsAuthenticated(true);
+    } else {
+      setUser(undefined);
+      setIsAuthenticated(false);
+    }
+  }, [authToken]);
 
   async function register(username: string, password: string) {
     setLoading(true);
