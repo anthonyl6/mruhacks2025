@@ -6,6 +6,10 @@ import * as Linking from 'expo-linking';
 import DeeplinkModal from 'components/DeeplinkModal';
 
 import './global.css';
+import { AuthProvider, useAuth } from 'providers/auth-provider';
+import { Loader2Icon } from 'lucide-react-native';
+import Login from 'components/Login';
+import { View } from 'react-native';
 
 export default function App() {
   const [deeplinkData, setDeeplinkData] = useState<{
@@ -80,15 +84,29 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <ScreenContent />
-      <StatusBar style="light" />
-      {deeplinkData.visible && deeplinkData.type && deeplinkData.id && (
-        <DeeplinkModal
-          onClose={closeModal}
-          type={deeplinkData.type}
-          id={deeplinkData.id}
-        />
-      )}
+      <AuthProvider>
+        <AppContent />
+        <StatusBar style="light" />
+        {deeplinkData.visible && deeplinkData.type && deeplinkData.id && (
+          <DeeplinkModal onClose={closeModal} type={deeplinkData.type} id={deeplinkData.id} />
+        )}
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }
+
+const AppContent = () => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) {
+    return (
+      <View className="fixed top-0 left-0 flex h-screen w-screen items-center justify-center animate-spin">
+        <Loader2Icon size={40} className="animate-spin" color="white" />
+      </View>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+  return <ScreenContent />;
+};
