@@ -2,16 +2,11 @@ import { useContext, createContext, useState, type ReactNode, useEffect } from '
 import axios from 'axios';
 
 const apiURL = import.meta.env.VITE_API_URL
-const config = {
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
 
 interface AuthContextData {
   user: object | null // for now
   isAuthenticated: boolean
-  key: String
+  authToken: string
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   loading: boolean
@@ -48,9 +43,8 @@ export function AuthProvider({ children }: {children: ReactNode}) {
 
   async function register(username: string, password: string) {
     try {
-      const formData = JSON.stringify({username: username, password: password});
       const res = await axios.post(`${apiURL}/auth/register`,
-        formData
+        {username, password}
       );
       console.log(res);
     } catch (error) {
@@ -82,7 +76,7 @@ export function AuthProvider({ children }: {children: ReactNode}) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, register, loading}}>
+    <AuthContext.Provider value={{ user, authToken, isAuthenticated, login, register, loading}}>
       {children}
     </AuthContext.Provider>
   );

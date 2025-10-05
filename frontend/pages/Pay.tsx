@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider'
 import Loading from '../components/Loading'
+import Bank from '../components/Bank';
 
 
 function Pay() {
@@ -12,11 +13,11 @@ function Pay() {
   const [amount, setAmount] = useState<Number>(100.50);
 
   function handleSend(): void {
-    console.log("-1 credit score");
+    console.log(user);
   }   
 
   if(loading) {
-    return <Loading/>
+    return <Loading/>;
   }
 
   if (!!user) {
@@ -30,6 +31,7 @@ function Pay() {
             <button onClick={handleSend}>Send Money</button>
           </div>
         </div>
+        <Bank/>
       </div>
     );
   } else {

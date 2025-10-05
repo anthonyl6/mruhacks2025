@@ -823,7 +823,7 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-axios@^1.12.2:
+axios@^1.12.2, axios@^1.7.4:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
   integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
@@ -1621,6 +1621,13 @@ picomatch@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.3.tgz#796c76136d1eead715db1e7bad785dedd695a042"
   integrity sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==
+
+plaid@^39.0.0:
+  version "39.0.0"
+  resolved "https://registry.yarnpkg.com/plaid/-/plaid-39.0.0.tgz#15cd38178fa64c0423bdf4cb436a07949baa9e89"
+  integrity sha512-7WuI97/R/xzjQV8ZSWY/rx5mFjjLDbIuGpFrOq0AolqplwT9StHe0ADa+H5rrpeOi6NNr+DdN7Ace/TACYME1w==
+  dependencies:
+    axios "^1.7.4"
 
 postcss@^8.5.6:
   version "8.5.6"

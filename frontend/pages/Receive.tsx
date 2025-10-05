@@ -4,6 +4,11 @@ import { useAuth } from '../providers/AuthProvider'
 import Loading from '../components/Loading'
 
 function Recieve() {
+  const { isAuthenticated, loading } = useAuth();
+
+  if(loading) {
+    return <Loading/> 
+  }
   const [source, setSource] = useState<String>('John');
   const [amount, setAmount] = useState<Number>(200);
 
@@ -15,11 +20,6 @@ function Recieve() {
     console.log("bruh but reject");
   }
 
-  const { isAuthenticated, loading } = useAuth();
-
-  if(loading) {
-    return <Loading/>
-  }
 
   if (isAuthenticated) {
     return(
