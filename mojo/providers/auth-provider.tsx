@@ -11,7 +11,7 @@ export interface AuthContextData {
   isAuthenticated: boolean;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string, fname: string, lname: string, email: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -49,11 +49,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [authToken]);
 
-  async function register(username: string, password: string) {
+  async function register(username: string, password: string, fname: string, lname: string, email: string) {
     setLoading(true);
     const { status } = await axios.post<{ message: string }>(`${apiURL}/auth/register`, {
       username,
       password,
+      fname,
+      lname,
+      email,
     });
     if (status !== 200) {
       setLoading(false);
