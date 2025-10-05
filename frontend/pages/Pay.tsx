@@ -17,11 +17,10 @@ function Pay() {
     setId(queryParams.get('id'))
 
     // do stuff with order id
-    const res = await axios.get(`${apiURL}/some endpoint`, { id })
-
-    // Split res into the amount and target username
-    setAmount(res.data.amount);
-    setTargetUser(res.data.targetUser)
+    axios.get(`${apiURL}/some endpoint`, { id }).then((res) => {
+      setAmount(res.data.amount);
+      setTargetUser(res.data.targetUser)
+    });
   }, []);
 
   // Dunno if we need res, w/e
