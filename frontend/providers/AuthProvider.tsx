@@ -14,6 +14,7 @@ interface AuthContextData {
   key: String
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
+  loading: boolean
 }
 
 export const AuthContext = createContext<AuthContextData | undefined>(undefined);
@@ -21,8 +22,8 @@ export const AuthContext = createContext<AuthContextData | undefined>(undefined)
 export function AuthProvider({ children }: {children: ReactNode}) {
   const [ authToken, setAuthToken ] = useState<string>('');
   const [ user, setUser ] = useState<object | null>(null);  
+  const [ isAuthenticated, setIsAuthenticated ] = useState<boolean>(false);
   const [ loading, setLoading ] = useState<boolean>(true);
-  const [ key, setKey ] = useState<String>('');
 
   async function login(username: string, password: string) {
     setLoading(true);
@@ -35,12 +36,13 @@ export function AuthProvider({ children }: {children: ReactNode}) {
       // unpack authToken into set user (same as useEffect code below)
       setUser(JSON.parse(atob(authToken.split('.')[1])));
       window.localStorage.setItem("authToken", authToken);
-
+      setIsAuthenticated(true);
+      
       return res;
     } catch (error) {
       console.log(`Error when logging in as ${username}: ${error}`)
     } finally {
-      setLoading(false);
+      setLoading(false);  
     }
   }
 
@@ -63,19 +65,24 @@ export function AuthProvider({ children }: {children: ReactNode}) {
 
   useEffect(() => {
     if (authToken) {
-      console.log(JSON.parse(atob(authToken.split(".")[1])))
+      setUser(JSON.parse(atob(authToken.split(".")[1])))
     }
+    setLoading(false);
   }, [authToken]);
-
+  
   useEffect(() => {
+    setLoading(true);
     const auth = window.localStorage.getItem("authToken");
     if (auth) {
       setAuthToken(auth);
+    } else {
+      setLoading(false);
     }
+    
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, key, login, register}}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, register, loading}}>
       {children}
     </AuthContext.Provider>
   );

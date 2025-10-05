@@ -5,7 +5,7 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
 
-  const {user, isAuthenticated, key, login, register} = useAuth();  
+  const {register} = useAuth();  
   async function handleRegister(e) {
     e.preventDefault();
     const res = await register(username, password);

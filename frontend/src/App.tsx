@@ -6,6 +6,7 @@ import Receive from '../pages/Receive';
 import Pay from '../pages/Pay';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import Close from '../pages/Close';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path='/pay' element={<Pay/>}/>
             <Route path='/login' element={<Login/>}/>
             <Route path='/register' element={<Register/>}/>
+            <Route path='/close' element={<Close/>}/>
             <Route path='*' element={<NoPage/>}/>
           </Routes>
         </BrowserRouter>
