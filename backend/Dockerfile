@@ -5,7 +5,7 @@ WORKDIR /var/api/mojo/
 
 COPY ./app.py app.py
 COPY ./auth.py auth.py
-COPY ./db.py db.py
+COPY ./schema.py schema.py
 COPY ./account_details.py account_details.py
 COPY ./payments.py payments.py
 COPY ./requirements.txt requirements.txt

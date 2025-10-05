@@ -32,6 +32,10 @@ class Payment(Document):
     completed = BooleanField(required=True)
     asccount = PlaidItems()
 
+def check_db_connection():
+    print(getenv("MONGODB_URL"))
+    print(User.objects)
+
 
 def create_user(username, password) -> User:
     user = User(username=username, password=password, balance=0.0)
