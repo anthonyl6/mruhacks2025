@@ -23,21 +23,33 @@ def transfer_money(sender, reciever, amount):
 @payments_bp.route('/inbox', methods=['GET'])
 @jwt_required()
 def inbox():
-    in_progress = Payment.objects(acknowledge=False)
+    current_username = get_jwt_identity()
+    in_progress = Payment.objects(reciever_username=current_username, acknowledge=False)
 
     if not in_progress:
-        return jsonify({"message": "No transactions!"}), 200
+        return jsonify({
+            "message": "No transactions!",
+            "transactions": []  # Ensure an empty list is returned
+        }), 200
     
+    # 1. Initialize transactions as an empty LIST
     transactions = []
+    
     for i in in_progress:
         transactions.append({
-            "transaction_id": i.id,
+            # 2. Convert ObjectId to str as you were doing
+            "transaction_id": str(i.id),
             "sender": i.sender_username,
-            "reciever": i.reciever_username,
+            "receiver": i.reciever_username,  # Note: I recommend renaming the attribute on your model to 'receiver_username'
             "amount": i.amount
         })
     
-    return jsonify({"message": "Found transactions!", "transactions": str(transactions)}), 200
+    # 3. Pass the list directly to jsonify. Flask/jsonify will convert it properly to a JSON array.
+    return jsonify({
+        "message": "Found transactions!",
+        "transactions": transactions # Pass the LIST object here
+    }), 200
+
 
 
 @payments_bp.route('/confirm', methods=['POST'])
@@ -55,7 +67,7 @@ def confirm_transaction():
 
     # Make sure the one requesting confirm is the sender
     try:
-        transaction = Payment.objects.get(id=transaction_id, sender_username=username)
+        transaction = Payment.objects.get(id=transaction_id)
     except:
         return jsonify({"message": "nuh!"}), 403
 
