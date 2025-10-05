@@ -7,6 +7,7 @@ from account_details import account_bp
 from payments import payments_bp
 from os import getenv
 from datetime import timedelta
+from schema import check_db_connection
 
 ACCESS_EXPIRES = timedelta(hours=1)
 
@@ -24,6 +25,8 @@ app.config["JWT_SECRET_KEY"] = getenv("SECRET_KEY")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
 
 jwt = JWTManager(app)
+
+check_db_connection()
 
 @app.route("/")
 def hello_world():
