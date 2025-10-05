@@ -1,9 +1,19 @@
 import { useContext, createContext, useState, type ReactNode, useEffect } from 'react';
+import axios from 'axios';
+
+const apiURL = import.meta.env.VITE_API_URL
+const config = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
 
 interface AuthContextData {
   user: object | null // for now
   isAuthenticated: boolean
   key: String
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextData | undefined>(undefined);
@@ -14,24 +24,49 @@ export function AuthProvider({ children }: {children: ReactNode}) {
   const [ loading, setLoading ] = useState<boolean>(true);
   const [ key, setKey ] = useState<String>('');
 
-  async function signIn() {
-    // setLoading(true);
-    // await do auth here, this gets authToken
-    setUser({ name: 'john', key: 'johnsecretkey' });
-    window.localStorage.setItem("authToken", "dsadsadsada");
-    // setLoading(false);
+  async function login(username: string, password: string) {
+    setLoading(true);
+    try {
+      // await do auth here, this gets authToken
+      console.log(apiURL)
+      const res = await axios.post(`${apiURL}/auth/login`, 
+        {username: username, password: password}
+      );
+      console.log(res);
+
+      // unpack authToken into set user (same as useEffect code below)
+      // setUser(JSON.parse(atob(authToken ?? "")));
+      // window.localStorage.setItem("authToken", "dsadsadsada");
+    } catch (error) {
+      console.log(`Error when logging in as ${username}: ${error}`)
+    } finally {
+      setLoading(false);
+    }
   }
 
-  async function signOut() {
-    setUser(null);
+  async function register(username: string, password: string) {
+    try {
+      const formData = JSON.stringify({username: username, password: password});
+      const res = await axios.post(`${apiURL}/auth/register`,
+        formData, config
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(`Error when registering ${username}: ${error}`)
+
+    }
   }
 
-  useEffect(() => {
-    setUser(JSON.parse(atob(authToken ?? "")))
-  }, [authToken]);
+  // async function signOut() {
+  //   setUser(null);
+  // }
+
+  // useEffect(() => {
+  //   setUser(JSON.parse(atob(authToken ?? "")))
+  // }, [authToken]);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, key}}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, key, login, register}}>
       {children}
     </AuthContext.Provider>
   );
@@ -40,4 +75,6 @@ export function AuthProvider({ children }: {children: ReactNode}) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
+  if (!context) throw new Error('useAuth must be wrapped within AuthProvider');
+  return context;
 }

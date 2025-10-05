@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../providers/AuthProvider'
 
+
 function Pay() {
   // both of these should probably be a parameter in send, but this for now
   const [target, setTarget] = useState<String>('John');
@@ -8,10 +9,20 @@ function Pay() {
 
 
   // testing useAuth
-  const {user, isAuthenticated, key} = useAuth();   
+  const {user, isAuthenticated, key, login, register} = useAuth();   
 
   function handleSend(): void {
     console.log("-1 credit score");
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    await login("john", "johnPassword");  
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    await register("john", "johnPassword");
   }
 
   return(
@@ -22,6 +33,11 @@ function Pay() {
       <div className="mt-4 flex flex-row">
         <div className="box bg-green-500 border-green-500 w-full p-2">
           <button onClick={handleSend}>Send Money</button>
+        </div>
+      </div>
+      <div className="mt-4 flex flex-row">
+        <div className="box bg-green-500 border-green-500 w-full p-2">
+          <button onClick={handleRegister}>Test Login</button>
         </div>
       </div>
     </div>
