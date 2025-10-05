@@ -9,24 +9,24 @@ services:
     volumes:
       - dbdata6:/data/db
 
-  # mojo:
-  #   build: .
-  #   networks:
-  #     - mongo
-  #   ports:
-  #     - "5000:5000"
-  #   env_file:
-  #     - .env
-
-  express:
-    image: mongo-express:latest
+  mojo:
+    build: .
     networks:
       - mongo
     ports:
-      - "8081:8081"
-    environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://mongodbbox:27017/
-      - ME_CONFIG_BASICAUTH_ENABLED="false"
+      - "5000:5000"
+    env_file:
+      - .env
+
+  # express:
+  #   image: mongo-express:latest
+  #   networks:
+  #     - mongo
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     - ME_CONFIG_MONGODB_URL=mongodb://mongodbbox:27017/
+  #     - ME_CONFIG_BASICAUTH_ENABLED="false"
 
 volumes:
   dbdata6:
