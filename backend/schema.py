@@ -5,32 +5,21 @@ from os import getenv
 # Connect to MongoDB
 connect(db="mojo", host=getenv("MONGODB_URL"))
 
-# Plaid class
-class PlaidItems(Document):
-    username = StringField(required=True)
-    item_id = StringField()
-    access_token = StringField()
-    institution_id = StringField()
-    institution_name = StringField()
-    status = BooleanField()
-    #products = ListField()
-    date_connected = DateTimeField(default=datetime.now)
+class Payment(Document):
+    sender_username = StringField(required=True)
+    reciever_username = StringField(required=True)
+    amount = FloatField(required=True)
+    completed = BooleanField(required=True, default=False)
+    acknowledge = BooleanField(required=True, default=False)
 
 class User(Document):
     username = StringField(required=True, max_length=100)
     password = StringField(required=True, max_length=100)
     balance = FloatField(required=True)
     sessions = ListField(StringField())
+    transactions = ListField(ReferenceField(Payment))
+    contacts = ListField(StringField())
     created_at = DateTimeField(default=datetime.now)
-    link_tokens = ListField(StringField())
-    plaid_items = ListField(ReferenceField(PlaidItems))
-
-class Payment(Document):
-    sender_username = User()
-    reciever_username = User()
-    amount = FloatField(required=True)
-    completed = BooleanField(required=True)
-    asccount = PlaidItems()
 
 def check_db_connection():
     print(getenv("MONGODB_URL"))
@@ -66,16 +55,6 @@ def get_user_details(username):
 
     return {
         "username": user.username,
-        "balance": user.balance
+        "balance": user.balance,
+        "transactions": user.transactions
     }
-
-def check_plaid_item_id(user, item_id):
-    try:
-        plaid_items = user.plaid_items
-        for p in plaid_items:
-            if p.item_id == item_id:
-                return True
-    except:
-        pass
-
-    return False
