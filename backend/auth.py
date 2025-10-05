@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from jinja2 import TemplateNotFound
-from db import get_user, insert_user, create_session, init_new_user
+from schema import create_user, search_user, create_session
 
 auth_bp = Blueprint('auth', __name__, template_folder='templates')
 
@@ -18,22 +18,15 @@ def register():
 
         username = request.json['username']
         password = request.json['password']
-
-        print(username)
-        print(password)
         
 
         # Check if the username already exists
-        if get_user(username=username):
+        if search_user(username=username):
             return jsonify({"message": "Failed to authenticate!"}), 403
         else:
-            status = insert_user(username=username, hash=generate_password_hash(password, 10))
+            status = create_user(username, generate_password_hash(password, 10))
             if not status:
                 return jsonify({"message": "Error registering!"}), 500
-            
-            # Init user
-            if not init_new_user(username):
-                return jsonify({"message": "Error initializing new user!"}), 500
             
             return jsonify({"message": "Registered successfully!"}), 200
     else:
@@ -52,12 +45,12 @@ def login():
         password = request.json['password']
 
         # Check if the username and password match
-        user = get_user(username=username)
+        user = search_user(username=username)
         if not user:
             return jsonify({"message": "Unknown username and password!"}), 403
 
-        if check_password_hash(user["password"], password):
-            token = create_session(user, create_access_token(username))
+        if check_password_hash(user.password, password):
+            token = create_session(username, create_access_token(username))
             if not token:
                 return jsonify({"message": "Login failed!"}), 500
             
