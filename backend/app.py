@@ -26,8 +26,6 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = ACCESS_EXPIRES
 
 jwt = JWTManager(app)
 
-check_db_connection()
-
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"

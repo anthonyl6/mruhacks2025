@@ -21,11 +21,6 @@ class User(Document):
     contacts = ListField(StringField())
     created_at = DateTimeField(default=datetime.now)
 
-def check_db_connection():
-    print(getenv("MONGODB_URL"))
-    print(User.objects)
-
-
 def create_user(username, password) -> User:
     user = User(username=username, password=password, balance=0.0)
     return user.save()
