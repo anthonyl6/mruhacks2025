@@ -6,3 +6,4 @@ flask-jwt-extended
 flask-cors
 plaid-python
 mongoengine
+stripe
