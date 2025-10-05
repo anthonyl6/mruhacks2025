@@ -18,11 +18,11 @@ RUN bun install
 # Copy source code
 COPY . .
 
-# Build the application
-RUN bun run build
+# # Build the application
+# RUN bun run build
 
 # Expose port
 EXPOSE 3002
 
 # Start the application
-CMD ["bun", "run", "preview", "--", "--host", "0.0.0.0", "--port", "3002"]
+CMD ["bun", "run", "dev", "--host", "0.0.0.0", "--port", "3002"]
