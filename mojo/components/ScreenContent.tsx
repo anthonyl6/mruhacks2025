@@ -1,5 +1,14 @@
-import { useState } from 'react';
-import { Platform, Pressable, Text, TextInput, View, Dimensions, Image } from 'react-native';
+import { Fragment, useState } from 'react';
+import {
+  Platform,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+  Dimensions,
+  Image,
+  ScrollView,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabGroup } from './TabGroup';
 import { LinkIcon } from 'lucide-react-native';
@@ -18,6 +27,79 @@ const users = [
   { email: 'serana@example.com', avatar: 'https://i.pravatar.cc/150?img=6' },
   { email: 'cheese@example.com', avatar: 'https://i.pravatar.cc/150?img=7' },
   { email: 'justcats@example.com', avatar: 'https://i.pravatar.cc/150?img=8' },
+];
+
+const transactions = [
+  {
+    currency: 'CAD',
+    amount: -10050,
+    date: '2025-01-01',
+    description: 'Payment to Alice',
+    from: 'alice1@example.com',
+  },
+  {
+    currency: 'USD',
+    amount: 20020,
+    date: '2025-01-02',
+    description: 'Received from Bob',
+    from: 'bob1@example.com',
+  },
+  {
+    currency: 'EUR',
+    amount: -30056,
+    date: '2025-01-03',
+    description: 'Payment to Brady',
+    from: 'brady1@example.com',
+  },
+  {
+    currency: 'GBP',
+    amount: 40050,
+    date: '2025-01-04',
+    description: 'Received from Herc',
+    from: 'herc1@example.com',
+  },
+  {
+    currency: 'AUD',
+    amount: -50000,
+    date: '2025-01-05',
+    description: 'Payment to Davo',
+    from: 'davo1@example.com',
+  },
+  {
+    currency: 'CAD',
+    amount: -10050,
+    date: '2025-01-01',
+    description: 'Payment to Alice',
+    from: 'alice2@example.com',
+  },
+  {
+    currency: 'USD',
+    amount: 20020,
+    date: '2025-01-02',
+    description: 'Received from Bob',
+    from: 'bob2@example.com',
+  },
+  {
+    currency: 'EUR',
+    amount: -30056,
+    date: '2025-01-03',
+    description: 'Payment to Brady',
+    from: 'brady2@example.com',
+  },
+  {
+    currency: 'GBP',
+    amount: 40050,
+    date: '2025-01-04',
+    description: 'Received from Herc',
+    from: 'herc2@example.com',
+  },
+  {
+    currency: 'AUD',
+    amount: -50000,
+    date: '2025-01-05',
+    description: 'Payment to Davo',
+    from: 'davo2@example.com',
+  },
 ];
 
 export const ScreenContent = () => {
@@ -83,6 +165,38 @@ export const ScreenContent = () => {
                 );
               })}
             </HorizontalSideScroll>
+          </View>
+          <View className="mb-12 w-full flex-1">
+            <ScrollView>
+              {transactions.map((transaction, index) => (
+                <Fragment key={transaction.from}>
+                  {index !== 0 && <View className="mx-6 h-px w-[calc(100%-3rem)] bg-gray-800" />}
+                  <View
+                    className={cn(
+                      'flex w-full flex-row p-6'
+                    )}>
+                    <View className="flex-1">
+                      <Text className="text-base text-gray-500/50">{transaction.from}</Text>
+                      <Text
+                        className={cn(
+                          'text-xl',
+                          transaction.amount > 0 ? 'text-receiving' : 'text-sending'
+                        )}>
+                        {transaction.currency} ${(Math.abs(transaction.amount) / 100).toFixed(2)}
+                      </Text>
+                    </View>
+                    <View className="">
+                      <Text className="text-right text-sm text-gray-500/50">
+                        {transaction.date}
+                      </Text>
+                      <Text className="text-right text-sm text-gray-500/50">
+                        {transaction.description}
+                      </Text>
+                    </View>
+                  </View>
+                </Fragment>
+              ))}
+            </ScrollView>
           </View>
         </View>
       </WrapperComponent>
