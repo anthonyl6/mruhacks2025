@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    allowedHosts: ['*'],
+    allowedHosts: ['mojoapi-web-3jopp6-773554-142-179-227-74.traefik.me', "mojo.alahdal.ca"],
     port: 3002,
     host: '0.0.0.0',
   },
