@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 3002
 
 # Start the application
-CMD ["bun", "run", "dev", "--host", "0.0.0.0", "--port", "3002"]
+CMD ["bun", "install", "&&", "bun", "run", "dev", "--host", "0.0.0.0", "--port", "3002"]
