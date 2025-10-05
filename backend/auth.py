@@ -11,9 +11,18 @@ def register():
     if request.method == 'POST':
         if "username" not in request.json:
             return jsonify({"message": "Please provide a username!"}), 403
-        
+            
         if "password" not in request.json:
             return jsonify({"message": "Please provide a password!"}), 403
+
+        if "fname" not in request.json:
+            return jsonify({"message": "Please provide a first name (fname)!"}), 403
+
+        if "lname" not in request.json:
+            return jsonify({"message": "Please provide a last name (lname)!"}), 403
+
+        if "email" not in request.json:
+            return jsonify({"message": "Please provide an email!"}), 403
 
 
         username = request.json['username']
