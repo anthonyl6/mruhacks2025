@@ -15,6 +15,7 @@ import { ArrowBigRightDash } from 'lucide-react-native';
 import { HorizontalSideScroll } from './slide'; // Adjust path if needed
 import { cn } from 'lib/util';
 import { useAuth } from 'providers/auth-provider';
+import SendAndRequestModal from './SendAndRequestModal';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -107,6 +108,13 @@ export const ScreenContent = () => {
   const isAndroid15 = Platform.OS === 'android' && Platform.Version >= 35;
   const [selectedTab, setSelectedTab] = useState<'send' | 'request'>('send');
   const [emailInput, setEmailInput] = useState(''); // New state for controlled input
+  const [sendAndRequestModalDetails, setSendAndRequestModalDetails] = useState<
+    | {
+        name?: string;
+        email?: string;
+      }
+    | undefined
+  >(undefined);
   const { user } = useAuth();
   const tabs = [
     { label: 'Send', value: 'send' as const, selectedColor: '#db8a74' },
@@ -117,8 +125,15 @@ export const ScreenContent = () => {
   return (
     <View className="bg-background flex flex-1 items-center justify-center">
       <WrapperComponent className="flex w-screen flex-1 flex-col items-start justify-start pt-16">
+        {sendAndRequestModalDetails?.email && (
+          <SendAndRequestModal
+            onClose={() => setSendAndRequestModalDetails(undefined)}
+            otherPartyDetails={sendAndRequestModalDetails}
+            type={selectedTab}
+          />
+        )}
         <View className="flex w-full flex-1 flex-col items-center justify-start">
-          <Text className="text-foreground text-3xl mt-8">Welcome, {user?.fname}!</Text>
+          <Text className="text-foreground mt-8 text-3xl">Welcome, {user?.fname}!</Text>
           <TabGroup selectedTab={selectedTab} onSelect={setSelectedTab} tabs={tabs} />
 
           {/* Email Input + Copy Button */}
@@ -132,7 +147,7 @@ export const ScreenContent = () => {
             />
             <Pressable
               className="items-center justify-center overflow-hidden rounded-full bg-[#212121] p-5 transition-all duration-300 active:bg-[#3f3f3f]"
-              onPress={() => console.log('copy link to clipboard')}>
+              onPress={() => setSendAndRequestModalDetails({ name: 'Unknown', email: emailInput })}>
               <ArrowBigRightDash size={20} color="#ffffff" strokeWidth={2} />
             </Pressable>
           </View>
@@ -154,7 +169,10 @@ export const ScreenContent = () => {
                       index === users.length - 1 && 'mr-10'
                     )}>
                     {/* Make avatar clickable to set email in input */}
-                    <Pressable onPress={() => setEmailInput(user.email)}>
+                    <Pressable
+                      onPress={() =>
+                        setSendAndRequestModalDetails({ name: truncatedEmail, email: user.email })
+                      }>
                       <Image
                         source={{ uri: user.avatar }}
                         className="mb-2 h-25 w-25 rounded-full border-2 border-white"
