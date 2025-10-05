@@ -17,6 +17,7 @@ services:
       - "5000:5000"
     env_file:
       - .env
+<<<<<<< HEAD
 
   express:
     image: mongo-express:latest
@@ -27,6 +28,8 @@ services:
     environment:
       - ME_CONFIG_MONGODB_URL=mongodb://mongodbbox:27017/
       - ME_CONFIG_BASICAUTH_ENABLED="false"
+=======
+>>>>>>> 5103977 (omg my .env had localhost for 2 hours and i didnt know what was wrong)
 
 volumes:
   dbdata6:
