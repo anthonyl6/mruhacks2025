@@ -6,7 +6,7 @@ import Bank from '../components/Bank';
 
 
 function Pay() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
   // both of these should probably be a parameter in send, but this for now
   const [target] = useState<string>('John');
@@ -16,27 +16,18 @@ function Pay() {
     console.log(user);
   }   
 
-  if(loading) {
-    return <Loading/>;
-  }
-
-  if (!!user) {
-    return (
-       <div className="text-center">
-        <div className="box mt-16 p-4">
-          <h2 className="">{target} has requested ${amount.toFixed(2)}</h2>
-        </div>
-        <div className="mt-4 flex flex-row">
-          <div className="box bg-green-500 border-green-500 w-full p-2">
-            <button type="button" onClick={handleSend}>Send Money</button>
-          </div>
-        </div>
-        <Bank/>
+  return (
+    <div className="text-center">
+      <div className="box mt-16 p-4">
+        <h2 className="">{target} has requested ${amount.toFixed(2)}</h2>
       </div>
-    );
-  } else {
-    return <Navigate to="/login" replace />;
-  }
+      <div className="mt-4 flex flex-row">
+        <div className="box bg-green-500 border-green-500 w-full p-2">
+          <button type="button" onClick={handleSend}>Send Money</button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Pay;
