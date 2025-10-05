@@ -1,6 +1,7 @@
 import { AuthProvider, ProtectedRoutes } from "../providers/AuthProvider";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Header from "../components/Header";
+import Home from "../pages/Home";
 import NoPage from "../pages/NoPage";
 import Receive from "../pages/Receive";
 import Pay from "../pages/Pay";
@@ -19,6 +20,7 @@ function App() {
               <Route path="/receive" element={<Receive />} />
               <Route path="/pay" element={<Pay />} />
             </Route>
+            <Route path="/" element={<Home/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/close" element={<Close />} />
