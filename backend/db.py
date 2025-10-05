@@ -34,7 +34,7 @@ def init_new_user(user):
 def create_session(user, access_token):
    # TODO: Revoke previous session
    
-   status = get_auth_collection().insert_one({"username": user["username"], "password": user["password"], "session": access_token})
+   status = get_auth_collection().find_one_and_update({"_id": user["_id"]}, {"$set": {"session": access_token}})
    if status:
       return access_token
    else:
@@ -50,4 +50,9 @@ def get_user_details(user):
    return get_details_collection().find_one({"username": user})
 
 def add_checkout_secret(user_details, secret):
-   return get_details_collection().insert_one({"username": user_details["username"], "balance": user_details["balance"], "checkouts": user_details["checkouts"].append(secret)})
+   checkouts = user_details["checkouts"]
+   if not checkouts:
+      checkouts = [secret]
+   else:
+      checkouts.append(secret)
+   return get_details_collection().find_one_and_update({"_id": user_details["_id"]}, {"$set": {"checkouts": checkouts}})
