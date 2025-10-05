@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { ScreenContent } from 'components/ScreenContent';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { HorizontalSideScroll } from './components/slide';
 import * as Linking from 'expo-linking';
 import DeeplinkModal from 'components/DeeplinkModal';
 
