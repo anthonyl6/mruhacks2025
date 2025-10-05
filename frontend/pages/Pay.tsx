@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider'
 import axios from 'axios'
 
@@ -8,7 +8,9 @@ const apiURL = import.meta.env.VITE_API_URL;
 function Pay() {
   const { authToken } = useAuth();
 
-  // This is ai slop, sorta
+  const navigate = useNavigate()
+
+  // This is ai slop, sorta (not anymore)
   const [id, setId] = useState<string | null>(null);
   const [targetUser, setTargetUser] = useState<string>('') // This might actually be user object
   const [amount, setAmount] = useState<Number>(1)
@@ -35,6 +37,7 @@ function Pay() {
       {headers: {Authorization: `Bearer ${authToken}`}}
     );
     // now maybe redirect to Close.tsx or maybe another confirmation page?
+    navigate('/close')
   }   
 
   return (

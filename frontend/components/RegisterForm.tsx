@@ -20,7 +20,7 @@ function RegisterForm() {
       console.log(error)
       navigate('/register');
     });
-    navigate('/login')
+    navigate('/')
   }
 
   return (

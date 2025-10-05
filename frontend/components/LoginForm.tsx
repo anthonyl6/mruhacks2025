@@ -1,5 +1,5 @@
 import { useId } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 import { useState } from "react";
 
@@ -7,11 +7,13 @@ function RegisterForm() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
+  const navigate = useNavigate();
+
   const { login } = useAuth();
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     const res = await login(username, password);
-    console.log(res);
+    navigate('/');
   }
 
   return (
