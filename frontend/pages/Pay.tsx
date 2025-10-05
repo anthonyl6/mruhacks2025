@@ -20,10 +20,7 @@ function Pay() {
     await login("john", "johnPassword");  
   }
 
-  async function handleRegister(e) {
-    e.preventDefault();
-    await register("john", "johnPassword");
-  }
+  
 
   return(
    <div className="text-center">

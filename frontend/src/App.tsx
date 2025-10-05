@@ -4,6 +4,8 @@ import Header from '../components/Header';
 import NoPage from '../pages/NoPage';
 import Receive from '../pages/Receive';
 import Pay from '../pages/Pay';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
           <Routes>
             <Route path='/receive' element={<Receive/>}/>
             <Route path='/pay' element={<Pay/>}/>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/register' element={<Register/>}/>
             <Route path='*' element={<NoPage/>}/>
           </Routes>
         </BrowserRouter>

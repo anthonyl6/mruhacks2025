@@ -32,8 +32,8 @@ export function AuthProvider({ children }: {children: ReactNode}) {
       const res = await axios.post(`${apiURL}/auth/login`, 
         {username: username, password: password}
       );
-      console.log(res);
-
+      console.log(res)
+      return(res)
       // unpack authToken into set user (same as useEffect code below)
       // setUser(JSON.parse(atob(authToken ?? "")));
       // window.localStorage.setItem("authToken", "dsadsadsada");
