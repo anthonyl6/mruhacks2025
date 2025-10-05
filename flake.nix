@@ -28,7 +28,6 @@
         buildInputs =
           with pkgs;
           [
-            eas-cli
             # website
             yarn
             # mobile app
