@@ -14,6 +14,6 @@ def details():
         if not details:
             return jsonify({"message": "Error grabbing user details!"}), 500
 
-        return jsonify({"message": "Account details sent.", "balance": details["balance"]}), 200
+        return jsonify({"message": "Account details sent.", "balance": details["balance"], "checkouts": details["checkouts"]}), 200
     else:
         return jsonify({"message": "POST not allowed!"}), 405

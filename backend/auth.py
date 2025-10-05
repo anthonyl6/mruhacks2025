@@ -11,15 +11,18 @@ auth_bp = Blueprint('auth', __name__, template_folder='templates')
 @auth_bp.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
-        if "username" not in request.form:
+        if "username" not in request.json:
             return jsonify({"message": "Please provide a username!"}), 403
         
-        if "password" not in request.form:
+        if "password" not in request.json:
             return jsonify({"message": "Please provide a password!"}), 403
 
 
-        username = request.form['username']
-        password = request.form['password']
+        username = request.json['username']
+        password = request.json['password']
+
+        print(username)
+        print(password)
         
 
         # Check if the username already exists
@@ -41,14 +44,14 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
-        if "username" not in request.form:
+        if "username" not in request.json:
             return jsonify({"message": "Please provide a username!"}), 403
         
-        if "password" not in request.form:
+        if "password" not in request.json:
             return jsonify({"message": "Please provide a password!"}), 403
         
-        username = request.form['username']
-        password = request.form['password']
+        username = request.json['username']
+        password = request.json['password']
 
         # Check if the username and password match
         user = get_user(username=username)

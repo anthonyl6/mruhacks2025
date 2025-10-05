@@ -56,7 +56,7 @@ resource "linode_instance" "server" {
   image           = "linode/ubuntu22.04"
   label           = "server"
   region          = var.region
-  type            = "g6-nanode-1"
+  type            = "g6-standard-1"
   swap_size       = 1024
   authorized_keys = [var.authorized_keys]
   root_pass       = var.root_pass

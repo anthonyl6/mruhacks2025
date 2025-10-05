@@ -27,7 +27,8 @@ def get_details_collection():
 def init_new_user(user):
    return get_details_collection().insert_one({
       "username": user,
-      "balance": 0
+      "balance": 0,
+      "checkouts": []
    })
 
 def create_session(user, access_token):
@@ -47,3 +48,6 @@ def insert_user(username, hash):
 
 def get_user_details(user):
    return get_details_collection().find_one({"username": user})
+
+def add_checkout_secret(user_details, secret):
+   return get_details_collection().insert_one({"username": user_details["username"], "balance": user_details["balance"], "checkouts": user_details["checkouts"].append(secret)})

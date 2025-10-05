@@ -1,10 +1,10 @@
-from flask import Blueprint, Flask, render_template, abort
-from flask_bcrypt import Bcrypt
+from flask import Flask
 from flask_jwt_extended import JWTManager
-from jinja2 import TemplateNotFound
+from flask_cors import CORS
 from dotenv import load_dotenv
 from auth import auth_bp
 from account_details import account_bp
+from payments import payments_bp
 from os import getenv
 from datetime import timedelta
 
@@ -16,6 +16,8 @@ load_dotenv()
 app = Flask(__name__)
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(account_bp, url_prefix="/account")
+app.register_blueprint(payments_bp, url_prefix="/payments")
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"], "allow_headers": "*"}})
 
 
 app.config["JWT_SECRET_KEY"] = getenv("SECRET_KEY")
