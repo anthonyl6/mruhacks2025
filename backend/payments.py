@@ -31,13 +31,13 @@ def inbox():
     transactions = []
     for i in in_progress:
         transactions.append({
-            "transaction_id": i._id,
-            "sender": i.sender,
-            "reciever": i.reciever,
+            "transaction_id": i.id,
+            "sender": i.sender_username,
+            "reciever": i.reciever_username,
             "amount": i.amount
         })
     
-    return jsonify({"message": "Found transactions!", "transactions": transactions}), 200
+    return jsonify({"message": "Found transactions!", "transactions": str(transactions)}), 200
 
 
 @payments_bp.route('/confirm', methods=['POST'])
@@ -47,15 +47,20 @@ def confirm_transaction():
         return jsonify({"message": "POST only!"}), 405
     
     if "transaction_id" not in request.json or "confirm" not in request.json:
-        return jsonify({"message": "Provide a transaction ID and a confirm status!"}), 405
+        return jsonify({"message": "Provide a transaction ID and a confirm status!"}), 403
     
     transaction_id = request.json["transaction_id"]
     confirm = request.json["confirm"]
+    username = get_jwt_identity()
 
-    transaction = Payment.objects.get(id=transaction_id)
+    # Make sure the one requesting confirm is the sender
+    try:
+        transaction = Payment.objects.get(id=transaction_id, sender_username=username)
+    except:
+        return jsonify({"message": "nuh!"}), 403
 
     if not transaction:
-        return jsonify({"message": "Invalid transaction ID!"}), 405
+        return jsonify({"message": "Invalid transaction ID!"}), 403
     
     if confirm == "true":
         sender = search_user(transaction.sender_username)
@@ -84,11 +89,11 @@ def send():
     # Validate input
     if "send_username" in request.json and "amount" in request.json:
         send_username = request.json.get("send_username")
-    elif "recieve_from" in request.json and "amount" in request.json:
-        send_username = request.json.get("recieve_from")
+    elif "receive_from" in request.json and "amount" in request.json:
+        send_username = request.json.get("receive_from")
 
     if not send_username:
-        return jsonify({"message": "Missing send_username/recieve_from or amount!"}), 400
+        return jsonify({"message": "Missing send_username/receive_from or amount!"}), 400
     
     try:
         amount = float(request.json.get("amount"))
@@ -99,24 +104,31 @@ def send():
     
     # Get sender and receiver
     username = get_jwt_identity()
-    sender = search_user(username)
-    receiver = search_user(send_username)
+
+    sender = None
+    receive = None
+    if "receive_from" in request.json:
+        sender = search_user(send_username)
+        receive = search_user(username)
+    else:
+        sender = search_user(username)
+        receive = search_user(send_username)
     
-    if not sender or not receiver:
+    if not sender or not receive:
         return jsonify({"message": "Sender or receiver not found!"}), 404
     
-    if sender.username == receiver.username:
+    if sender.username == receive.username:
         return jsonify({"message": "Can't send money to yourself silly :)"}), 403
     
     
     # Simulate money movement
-    payment = Payment(sender_username=sender.username, reciever_username=receiver.username, amount=amount, completed=False)
+    payment = Payment(sender_username=sender.username, reciever_username=receive.username, amount=amount, completed=False)
     payment.save()
 
     sender.transactions.append(payment)
     sender.save()
 
-    receiver.transactions.append(payment)
-    receiver.save()
+    receive.transactions.append(payment)
+    receive.save()
 
     return jsonify({"message": "Transaction created!", "transaction_id": str(payment.id)}), 200
