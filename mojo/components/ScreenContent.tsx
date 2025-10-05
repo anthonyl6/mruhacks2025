@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabGroup } from './TabGroup';
-import { LinkIcon } from 'lucide-react-native';
+import { ArrowBigRightDash } from 'lucide-react-native';
 import { HorizontalSideScroll } from './slide'; // Adjust path if needed
 import { cn } from 'lib/util';
 
@@ -131,7 +131,7 @@ export const ScreenContent = () => {
             <Pressable
               className="items-center justify-center overflow-hidden rounded-full bg-[#212121] p-5 transition-all duration-300 active:bg-[#3f3f3f]"
               onPress={() => console.log('copy link to clipboard')}>
-              <LinkIcon stroke={'#ffffff'} />
+              <ArrowBigRightDash size={20} color="#ffffff" strokeWidth={2} />
             </Pressable>
           </View>
 
