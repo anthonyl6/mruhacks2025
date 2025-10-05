@@ -166,7 +166,7 @@ export const ScreenContent = () => {
               })}
             </HorizontalSideScroll>
           </View>
-          <View className="mb-12 w-full flex-1">
+          <View className="mb-12 w-screen flex-1">
             <ScrollView>
               {transactions.map((transaction, index) => (
                 <Fragment key={transaction.from}>
