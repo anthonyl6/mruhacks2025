@@ -7,6 +7,7 @@ import Pay from '../pages/Pay';
 function App() {
   return (
     <div className='min-h-screen bg-global p-4'>
+      {/* Auth provider wraps verything in div */}
       <BrowserRouter>
         <Header/>
         <Routes>

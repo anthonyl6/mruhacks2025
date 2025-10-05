@@ -1,9 +1,14 @@
 import { useState } from 'react'
+import { useAuth } from '../providers/AuthProvider'
 
 function Pay() {
   // both of these should probably be a parameter in send, but this for now
   const [target, setTarget] = useState<String>('John');
   const [amount, setAmount] = useState<Number>(100.50);
+
+
+  // testing useAuth
+  const {user, isAuthenticated, key} = useAuth();   
 
   function handleSend(): void {
     console.log("-1 credit score");
