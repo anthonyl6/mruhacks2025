@@ -16,6 +16,7 @@ import { HorizontalSideScroll } from './slide'; // Adjust path if needed
 import { cn } from 'lib/util';
 import { useAuth } from 'providers/auth-provider';
 import SendAndRequestModal from './SendAndRequestModal';
+import DetailedTransaction from './DetailedTransaction';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -115,6 +116,16 @@ export const ScreenContent = () => {
       }
     | undefined
   >(undefined);
+  const [detailedTransactionModalDetails, setDetailedTransactionModalDetails] = useState<
+    | {
+        currency: string;
+        amount: number;
+        date: string;
+        description: string;
+        from: string;
+      }
+    | undefined
+  >(undefined);
   const { user } = useAuth();
   const tabs = [
     { label: 'Send', value: 'send' as const, selectedColor: '#db8a74' },
@@ -130,6 +141,12 @@ export const ScreenContent = () => {
             onClose={() => setSendAndRequestModalDetails(undefined)}
             otherPartyDetails={sendAndRequestModalDetails}
             type={selectedTab}
+          />
+        )}
+        {detailedTransactionModalDetails && (
+          <DetailedTransaction
+            onClose={() => setDetailedTransactionModalDetails(undefined)}
+            transactionDetails={detailedTransactionModalDetails}
           />
         )}
         <View className="flex w-full flex-1 flex-col items-center justify-start">
@@ -192,7 +209,9 @@ export const ScreenContent = () => {
           <View className="mb-12 w-screen flex-1">
             <ScrollView>
               {transactions.map((transaction, index) => (
-                <Fragment key={transaction.from}>
+                <Pressable key={transaction.from}
+                onPress={() => setDetailedTransactionModalDetails(transaction)}
+                >
                   {index !== 0 && <View className="mx-6 h-px w-[calc(100%-3rem)] bg-gray-800" />}
                   <View className={cn('flex w-full flex-row p-6')}>
                     <View className="flex-1">
@@ -214,7 +233,7 @@ export const ScreenContent = () => {
                       </Text>
                     </View>
                   </View>
-                </Fragment>
+                </Pressable>
               ))}
             </ScrollView>
           </View>

@@ -15,6 +15,7 @@
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "expo": "~54.0.4",
+    "expo-dev-client": "~6.0.13",
     "expo-linking": "^8.0.8",
     "expo-status-bar": "~3.0.8",
     "lucide-react-native": "^0.544.0",
