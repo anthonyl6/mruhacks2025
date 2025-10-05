@@ -13,8 +13,7 @@ WORKDIR /app
 COPY package.json bun.lock* ./
 
 # Install dependencies (including dev dependencies for build)
-RUN if [ -f bun.lock ]; then bun install --frozen-lockfile --dev; \
-    else bun install --dev; fi
+RUN bun install
 
 # Copy source code
 COPY . .
