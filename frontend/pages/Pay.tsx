@@ -9,8 +9,8 @@ function Pay() {
   const { user, loading } = useAuth();
 
   // both of these should probably be a parameter in send, but this for now
-  const [target, setTarget] = useState<String>('John');
-  const [amount, setAmount] = useState<Number>(100.50);
+  const [target] = useState<string>('John');
+  const [amount] = useState<number>(100.50);
 
   function handleSend(): void {
     console.log(user);
@@ -28,7 +28,7 @@ function Pay() {
         </div>
         <div className="mt-4 flex flex-row">
           <div className="box bg-green-500 border-green-500 w-full p-2">
-            <button onClick={handleSend}>Send Money</button>
+            <button type="button" onClick={handleSend}>Send Money</button>
           </div>
         </div>
         <Bank/>

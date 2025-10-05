@@ -5,12 +5,12 @@ import Loading from '../components/Loading'
 
 function Recieve() {
   const { isAuthenticated, loading } = useAuth();
+  const [source] = useState<string>('John');
+  const [amount] = useState<number>(200);
 
   if(loading) {
     return <Loading/> 
   }
-  const [source, setSource] = useState<String>('John');
-  const [amount, setAmount] = useState<Number>(200);
 
   function handleAccept(): void {
     console.log("bruh");
@@ -32,10 +32,10 @@ function Recieve() {
         </div>
         <div className="mt-4 flex flex-row">
           <div className="box bg-green-500 border-green-500 w-1/2 mr-2 p-2">
-            <button onClick={handleAccept}>Accept</button>
+            <button type="button" onClick={handleAccept}>Accept</button>
           </div>
           <div className="box bg-red-500 border-red-500 w-1/2 ml-2 p-2">
-            <button onClick={handleReject}>Reject</button>
+            <button type="button" onClick={handleReject}>Reject</button>
           </div>
         </div>
       </div>

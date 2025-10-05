@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import { useId } from "react";
 
 import { useAuth } from "../providers/AuthProvider";
 import { useState } from "react";
@@ -8,7 +8,7 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
 
   const { login } = useAuth();
-  async function handleLogin(e) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     const res = await login(username, password);
     console.log(res);
