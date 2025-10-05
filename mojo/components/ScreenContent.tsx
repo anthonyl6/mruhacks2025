@@ -14,6 +14,7 @@ import { TabGroup } from './TabGroup';
 import { ArrowBigRightDash } from 'lucide-react-native';
 import { HorizontalSideScroll } from './slide'; // Adjust path if needed
 import { cn } from 'lib/util';
+import { useAuth } from 'providers/auth-provider';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -106,6 +107,7 @@ export const ScreenContent = () => {
   const isAndroid15 = Platform.OS === 'android' && Platform.Version >= 35;
   const [selectedTab, setSelectedTab] = useState<'send' | 'request'>('send');
   const [emailInput, setEmailInput] = useState(''); // New state for controlled input
+  const { user } = useAuth();
   const tabs = [
     { label: 'Send', value: 'send' as const, selectedColor: '#db8a74' },
     { label: 'Request', value: 'request' as const, selectedColor: '#9b96b0' },
@@ -116,7 +118,7 @@ export const ScreenContent = () => {
     <View className="bg-background flex flex-1 items-center justify-center">
       <WrapperComponent className="flex w-screen flex-1 flex-col items-start justify-start pt-16">
         <View className="flex w-full flex-1 flex-col items-center justify-start">
-          <Text className="text-foreground text-5xl">Mojo</Text>
+          <Text className="text-foreground text-5xl">{user?.fname} {user?.lname}</Text>
           <TabGroup selectedTab={selectedTab} onSelect={setSelectedTab} tabs={tabs} />
 
           {/* Email Input + Copy Button */}
@@ -171,10 +173,7 @@ export const ScreenContent = () => {
               {transactions.map((transaction, index) => (
                 <Fragment key={transaction.from}>
                   {index !== 0 && <View className="mx-6 h-px w-[calc(100%-3rem)] bg-gray-800" />}
-                  <View
-                    className={cn(
-                      'flex w-full flex-row p-6'
-                    )}>
+                  <View className={cn('flex w-full flex-row p-6')}>
                     <View className="flex-1">
                       <Text className="text-base text-gray-500/50">{transaction.from}</Text>
                       <Text

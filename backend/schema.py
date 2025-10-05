@@ -16,13 +16,16 @@ class User(Document):
     username = StringField(required=True, max_length=100)
     password = StringField(required=True, max_length=100)
     balance = FloatField(required=True)
+    fname = StringField(required=False, max_length=100)
+    lname = StringField(required=False, max_length=100)
+    email = StringField(required=False, max_length=100)
     sessions = ListField(StringField())
     transactions = ListField(ReferenceField(Payment))
     contacts = ListField(StringField())
     created_at = DateTimeField(default=datetime.now)
 
-def create_user(username, password) -> User:
-    user = User(username=username, password=password, balance=0.0)
+def create_user(username, password, fname = None, lname = None, email = None) -> User:
+    user = User(username=username, password=password, balance=0.0, fname=fname, lname=lname, email=email)
     return user.save()
 
 def search_user(username) -> User:
@@ -49,6 +52,9 @@ def get_user_details(username):
         return None
 
     return {
+        "fname": user.fname,
+        "lname": user.lname,
+        "email": user.email,
         "username": user.username,
         "balance": user.balance,
         "transactions": user.transactions

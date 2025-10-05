@@ -18,13 +18,15 @@ def register():
 
         username = request.json['username']
         password = request.json['password']
-        
+        fname = request.json['fname']
+        lname = request.json['lname']
+        email = request.json['email']
 
         # Check if the username already exists
         if search_user(username=username):
             return jsonify({"message": "Failed to authenticate!"}), 403
         else:
-            status = create_user(username, generate_password_hash(password, 10))
+            status = create_user(username, generate_password_hash(password, 10), fname, lname, email)
             if not status:
                 return jsonify({"message": "Error registering!"}), 500
             
@@ -50,7 +52,7 @@ def login():
             return jsonify({"message": "Unknown username and password!"}), 403
 
         if check_password_hash(user.password, password):
-            token = create_session(username, create_access_token(username))
+            token = create_session(username, create_access_token(username, additional_claims={"fname": user.fname, "lname": user.lname, "email": user.email, "username": user.username}))
             if not token:
                 return jsonify({"message": "Login failed!"}), 500
             
