@@ -134,6 +134,9 @@ export const ScreenContent = () => {
         )}
         <View className="flex w-full flex-1 flex-col items-center justify-start">
           <Text className="text-foreground mt-8 text-3xl">Welcome, {user?.fname}!</Text>
+          <Text className="text-foreground mt-8 text-2xl">
+            Your balance is ${(user?.balance ?? 0).toFixed(2)}
+          </Text>
           <TabGroup selectedTab={selectedTab} onSelect={setSelectedTab} tabs={tabs} />
 
           {/* Email Input + Copy Button */}
