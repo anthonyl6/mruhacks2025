@@ -20,7 +20,7 @@ function Pay() {
     setId(queryParams.get('id'))
 
     // do stuff with order id
-    axios.get(`${apiURL}/account/details`,{
+    axios.get(`${apiURL}account/details`,{
       params: { id }, 
       headers: {Authorization: `Bearer ${authToken}`}
     }
@@ -32,7 +32,7 @@ function Pay() {
 
   // Dunno if we need res, w/e
   async function handleSend() {
-    await axios.post(`${apiURL}/payments/confirm`, 
+    await axios.post(`${apiURL}payments/confirm`, 
       {transaction_id: id, confirm: true},
       {headers: {Authorization: `Bearer ${authToken}`}}
     );
