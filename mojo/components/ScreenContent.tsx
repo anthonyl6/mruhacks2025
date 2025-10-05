@@ -118,7 +118,7 @@ export const ScreenContent = () => {
     <View className="bg-background flex flex-1 items-center justify-center">
       <WrapperComponent className="flex w-screen flex-1 flex-col items-start justify-start pt-16">
         <View className="flex w-full flex-1 flex-col items-center justify-start">
-          <Text className="text-foreground text-5xl">{user?.fname} {user?.lname}</Text>
+          <Text className="text-foreground text-3xl mt-8">Welcome, {user?.fname}!</Text>
           <TabGroup selectedTab={selectedTab} onSelect={setSelectedTab} tabs={tabs} />
 
           {/* Email Input + Copy Button */}
