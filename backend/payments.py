@@ -1,23 +1,51 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from db import get_user_details, add_checkout_secret
-import stripe
+import plaid
+from plaid.model.link_token_create_request import LinkTokenCreateRequest
+from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
+from plaid.model.products import Products
+from plaid.model.country_code import CountryCode
+from plaid.api import plaid_api
+from plaid.configuration import Configuration
+from plaid.api_client import ApiClient
 import os
 
-stripe.api_key = os.getenv("STRIPE_KEY")
+
+# Plaid configuration
+PLAID_CLIENT_ID = os.getenv("PLAID_CLIENT_ID")
+PLAID_SECRET = os.getenv("PLAID_SECRET")
+PLAID_ENV = os.getenv("PLAID_ENV", "sandbox")  # Default to sandbox
+
+# Initialize Plaid client
+configuration = Configuration(
+    host=plaid.Environment.Sandbox if PLAID_ENV == "sandbox" else plaid.Environment.Production,
+    api_key={
+        'clientId': PLAID_CLIENT_ID,
+        'secret': PLAID_SECRET,
+    }
+)
+api_client = ApiClient(configuration)
+client = plaid_api.PlaidApi(api_client)
+
 payments_bp = Blueprint('payments', __name__, template_folder='templates')
 
-def create_checkout(amount):
-    if type(amount) != float:
+def create_link_token(user_id):
+    try:
+        request = LinkTokenCreateRequest(
+            client_id=PLAID_CLIENT_ID,
+            secret=PLAID_SECRET,
+            client_name="Your App Name",
+            language="en",
+            country_codes=[CountryCode('CA')],
+            user=LinkTokenCreateRequestUser(client_user_id=user_id),
+            products=[Products('transactions')]
+        )
+        response = client.link_token_create(request)
+        return response['link_token']
+    except plaid.ApiException as e:
+        print(f"Plaid error: {e}")
         return None
-    
-    intent = stripe.PaymentIntent.create(
-        amount=amount,  # $20.00 in cents
-        currency='cad',
-        payment_method_types=['bank'],  # Or others like 'us_bank_account'
-    )
-    # Return intent.client_secret to frontend for confirmation via Stripe.js
-    return intent.client_secret
 
 @payments_bp.route('/send', methods=['POST'])
 @jwt_required()
@@ -43,26 +71,28 @@ def send():
         if not details:
             return jsonify({"message": "Error grabbing user details!"}), 500
         
-        checkout_secret = create_checkout(amount=amount)
+        # Create Plaid link token
+        link_token = create_link_token(username)
 
-        if not add_checkout_secret(details, checkout_secret):
-            return jsonify({"message": "Error saving the checkout."}), 200
+        if not link_token:
+            return jsonify({"message": "Error creating link token."}), 500
 
-        return jsonify({"message": "Checkout created.", "secret": checkout_secret}), 200
+        if not add_checkout_secret(details, link_token):
+            return jsonify({"message": "Error saving the link token."}), 500
+
+        return jsonify({"message": "Link token created.", "link_token": link_token}), 200
     else:
         return jsonify({"message": "POST not allowed!"}), 405
     
-@payments_bp.route('/recieve', methods=['POST'])
+@payments_bp.route('/receive', methods=['POST'])
 @jwt_required()
-def recieve():
+def receive():
     if request.method == 'POST':
         username = get_jwt_identity()
         details = get_user_details(username)
 
         if not details:
             return jsonify({"message": "Error grabbing user details!"}), 500
-        
-
 
         return jsonify({"message": "Account details sent.", "balance": details["balance"]}), 200
     else:

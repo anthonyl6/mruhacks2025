@@ -18,6 +18,16 @@ services:
     env_file:
       - .env
 
+  express:
+    image: mongo-express:latest
+    networks:
+      - mongo
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://mongodbbox:27017/
+      - ME_CONFIG_BASICAUTH_ENABLED="false"
+
 volumes:
   dbdata6:
 

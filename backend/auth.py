@@ -6,8 +6,6 @@ from db import get_user, insert_user, create_session, init_new_user
 
 auth_bp = Blueprint('auth', __name__, template_folder='templates')
 
-
-
 @auth_bp.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':

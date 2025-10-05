@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaid Link Tester</title>
+    <!-- Plaid Link SDK script -->
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+</head>
+<body>
+    <h1>Plaid Link Tester</h1>
+    <p>
+        Paste your Plaid Link Token here and click "Connect to Bank".
+    </p>
+    <input type="text" id="linkTokenInput" placeholder="Enter your link_token here" size="60">
+    <button id="connectButton">Connect to Bank</button>
+
+    <div id="results">
+        <h2>Results:</h2>
+        <p><strong>Status:</strong> <span id="status">Ready</span></p>
+        <p><strong>Public Token:</strong> <span id="publicToken">N/A</span></p>
+        <p><strong>Metadata:</strong> <pre id="metadata">N/A</pre></p>
+        <p style="color: red;"><strong>Error:</strong> <span id="error">N/A</span></p>
+    </div>
+
+    <script>
+        document.getElementById('connectButton').addEventListener('click', () => {
+            const linkToken = document.getElementById('linkTokenInput').value.trim();
+
+            if (!linkToken) {
+                alert('Please enter a link token.');
+                return;
+            }
+
+            document.getElementById('status').textContent = 'Opening Plaid Link...';
+            document.getElementById('error').textContent = 'N/A';
+            document.getElementById('publicToken').textContent = 'N/A';
+            document.getElementById('metadata').textContent = 'N/A';
+
+
+            // Initialize Plaid Link
+            const handler = Plaid.create({
+                token: linkToken,
+                onLoad: function() {
+                    // Link is ready to be used.
+                    document.getElementById('status').textContent = 'Link loaded.';
+                },
+                onSuccess: function(public_token, metadata) {
+                    // Send the public_token to your backend to exchange for an access_token
+                    document.getElementById('status').textContent = 'Success! Send public_token to your backend.';
+                    document.getElementById('publicToken').textContent = public_token;
+                    document.getElementById('metadata').textContent = JSON.stringify(metadata, null, 2);
+                    console.log('Public Token:', public_token);
+                    console.log('Metadata:', metadata);
+
+                    // At this point, you would typically make an AJAX request to your backend:
+                    /*
+                    fetch('/api/exchange_public_token', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer YOUR_JWT_TOKEN' // If your backend endpoint is protected
+                        },
+                        body: JSON.stringify({ public_token: public_token })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Backend response:', data);
+                        // Handle response, e.g., show success message or navigate
+                    })
+                    .catch(error => {
+                        console.error('Error exchanging public token:', error);
+                    });
+                    */
+                },
+                onExit: function(err, metadata) {
+                    // The user exited the Link flow.
+                    if (err != null) {
+                        document.getElementById('status').textContent = 'Error during Link flow.';
+                        document.getElementById('error').textContent = err.display_message || err.error_message || JSON.stringify(err);
+                        console.error('Plaid Link Error:', err);
+                    } else {
+                        document.getElementById('status').textContent = 'User exited Link flow.';
+                    }
+                    document.getElementById('metadata').textContent = JSON.stringify(metadata, null, 2);
+                    console.log('Plaid Link exited:', err, metadata);
+                },
+                onEvent: function(eventName, metadata) {
+                    // Fired when a Plaid Link event occurs.
+                    console.log('Plaid Link Event:', eventName, metadata);
+                    document.getElementById('status').textContent = `Event: ${eventName}`;
+                }
+            });
+
+            // Open Link in a popup
+            handler.open();
+        });
+    </script>
+</body>
+</html>
