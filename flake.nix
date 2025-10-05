@@ -86,6 +86,31 @@
               type = "app";
               program = "${dev-mobile}";
             };
+          install-web =
+            let
+              install-web = pkgs.writeShellScript "install-web" ''
+                echo "installing web dependencies"
+                cd frontend
+                ${pkgs.yarn}/bin/yarn i
+              '';
+            in
+            {
+              type = "app";
+              program = "${install-web}";
+            };
+          dev-web =
+            let
+              dev-web = pkgs.writeShellScript "dev-web" ''
+                echo "running dev environment"
+                cd frontend
+                nix run .#install-web
+                ${pkgs.yarn}/bin/yarn dev
+              '';
+            in
+            {
+              type = "app";
+              program = "${dev-web}";
+            };
         };
       }
     );
